@@ -13,7 +13,8 @@ class AccessContractModel
 {
     const URl="http://localhost:8545";
     const ACCOUNT="0xDd421A95ab8D53919092Cf2A144815905C2BC4Db";
-    const CONTRACT="0x690Ea531A7ba08BEA5789BB0f708E73CCe864276";
+    //const CONTRACT="0x690Ea531A7ba08BEA5789BB0f708E73CCe864276";
+    const CONTRACT="0x326156a7eCb0e448840ffC216446dCDDE68D321c";
 
     function getDocumentCount(){
         // keccak-256 de getDocumentCount() es 3d1c227335f9755b3b49b8845a25fff553fbe76676aff139dcdcb6ac8783f91c, se toman los 8 primeros caracteres
@@ -834,7 +835,7 @@ class AccessContractModel
     }
 
 //-----------------------------------------------------insert--------------------------------------------------
-    function insertDocument($id, $invoiceNumber,$fiscalYear,$total ,$factoringTotal ,$state ,$currency,$paymentType,
+    /*function insertDocument($id, $invoiceNumber,$fiscalYear,$total ,$factoringTotal ,$state ,$currency,$paymentType,
                             $supplierName,$customerName,$financialInstitutionName,$factoringState,$paymentTerms,
                             $invoiceDate,$paymentDate,$expirationDate,$factoringExpirationDate){
         // hex de los parametros
@@ -1006,7 +1007,7 @@ class AccessContractModel
 
         return "hash de la transacion : ".$result." hash de la transacion extra : ".$resultExtra;
 
-    }
+    }*/
 
 
 //---------------------------------------------------setters------------------------------------------------------
@@ -1024,11 +1025,11 @@ class AccessContractModel
         //(5*32)=160 = a0
         $argExpirationDatePos =str_pad("a0", 64, "0", STR_PAD_LEFT);
         //keccak-256 de setExpirationDate(string,string) 6547f5faef5286132db7b1b4dc8bb572c7d5902a6913c8184de8207bdcb6e8f7
-        $call="0x6547f5fa". $argIdPos .$argExpirationDatePos. $leghtIdHex.$idHex.$leghtExpirationDateHex.$expirationDateHexPad;
+        $bytecode="0x6547f5fa". $argIdPos .$argExpirationDatePos. $leghtIdHex.$idHex.$leghtExpirationDateHex.$expirationDateHexPad;
 
         $data  = [
             'jsonrpc'=>'2.0','method'=>'eth_sendTransaction','params'=>[[
-                "from"=> self::ACCOUNT, "to"=> self::CONTRACT,"gas"=>"0x927c0","data"=> $call]],'id'=>67
+                "from"=> self::ACCOUNT, "to"=> self::CONTRACT,"gas"=>"0x927c0","data"=> $bytecode]],'id'=>67
         ];
         $params= json_encode($data);
         $this->unlockAccount();
@@ -1382,4 +1383,91 @@ class AccessContractModel
         }
         return $string;
     }
+
+    function insertDocument($documentUniqueId,$invoiceNumber,$total, $currency,$paymentType, $supplierName,
+                            $customerName,$paymentTerms, $dates){
+        $utils= new Utils();
+        // firma del metodo
+        $signature = $utils->hexMethodSignature("insertDocument(bytes,bytes32,bytes32,bytes32,bytes32,bytes,bytes,bytes32,bytes)");
+        // argumentos en hexadecimal
+        $hexDocumentUniqueId = $utils-> stringToHex($documentUniqueId);
+        $hexInvoiceNumber = $utils-> stringToHex($invoiceNumber);
+        $hexTotal = $utils-> stringToHex($total);
+        $hexCurrency = $utils-> stringToHex($currency);
+        $hexPaymentType = $utils-> stringToHex($paymentType);
+        $hexSupplierName = $utils-> stringToHex($supplierName);
+        $hexCustomerName = $utils-> stringToHex($customerName);
+        $hexPaymentTerms = $utils-> stringToHex($paymentTerms);
+        $hexDates = $utils-> stringToHex($dates);
+        //tamaño de los argumentos dinamicos(bytes) sin dezplazar y desplazado
+        $rawHexDocumentUniqueIdLength = strlen($hexDocumentUniqueId)/2;
+        $hexDocumentUniqueIdLengthPad = str_pad(dechex($rawHexDocumentUniqueIdLength), 64, "0", STR_PAD_LEFT);
+        $rawHexSupplierNameLength = strlen($hexSupplierName )/2;
+        $hexSupplierNameLengthPad = str_pad(dechex($rawHexSupplierNameLength), 64, "0", STR_PAD_LEFT);
+        $rawHexCustomerNameLength = strlen($hexCustomerName )/2;
+        $hexCustomerNameLengthPad = str_pad(dechex($rawHexCustomerNameLength), 64, "0", STR_PAD_LEFT);
+        $rawHexDatesLength = strlen($hexDates)/2;
+        $hexDatesLengthPad = str_pad(dechex($rawHexDatesLength), 64, "0", STR_PAD_LEFT);
+        //tamaño de los argumentos dinamicos(bytes) en bloques de 32 bytes
+        $hexDocumentUniqueIdLength32 = $utils->lengthBytesOnBlocksOf32($hexDocumentUniqueId);
+        $hexSupplierNameLength32 = $utils->lengthBytesOnBlocksOf32($rawHexSupplierNameLength);
+        $hexCustomerNameLength32 = $utils->lengthBytesOnBlocksOf32($rawHexCustomerNameLength);
+        $hexDatesLength32 = $utils->lengthBytesOnBlocksOf32($rawHexDatesLength);
+        //offset argumentos dinamicos(bytes)
+        $offsetDocumentUniqueID = str_pad(dechex(32*9), 64, "0", STR_PAD_LEFT);//numero de argumentos
+        $offsetSupplierName = str_pad(dechex(32*9 + 32+$hexDocumentUniqueIdLength32), 64, "0", STR_PAD_LEFT);//numero de arg + ID
+        $offsetCustomerName = str_pad(dechex(32*9 + 32+$hexDocumentUniqueIdLength32 + 32+$hexSupplierNameLength32), 64, "0", STR_PAD_LEFT);//numero de arg + ID + supplier
+        $offsetDates = str_pad(dechex(32*9 + 32*3 +$hexDocumentUniqueIdLength32+$hexSupplierNameLength32+$hexCustomerNameLength32), 64, "0", STR_PAD_LEFT);//numero de arg + ID + supplier + customer
+        //argumentos no dinamicos desplazados
+        $hexInvoiceNumberPad = str_pad($hexInvoiceNumber, 64, "0");
+        $hexTotalPad = str_pad($hexTotal, 64, "0");
+        $hexCurrencyPad = str_pad($hexCurrency, 64, "0");
+        $hexPaymentTypePad = str_pad($hexPaymentType, 64, "0");
+        $hexPaymentTermsPad = str_pad($hexPaymentTerms, 64, "0");
+        //argumentos dinamicos completados con ceros
+        $hexDocumentUniqueIdFull= str_pad($hexDocumentUniqueId,  $hexDocumentUniqueIdLength32*2 , "0");
+        $hexSupplierNameFull= str_pad($hexSupplierName,  $hexSupplierNameLength32*2 , "0");
+        $hexCustomerNameFull= str_pad($hexCustomerName,  $hexCustomerNameLength32*2 , "0");
+        $hexDatesFull= str_pad($hexDates,  $hexDatesLength32*2 , "0");
+
+
+
+        $call=$signature.
+            $offsetDocumentUniqueID.$hexInvoiceNumberPad.$hexTotalPad.$hexCurrencyPad.$hexPaymentTypePad.  // argumentos no dinamicos y offsets de los dinamicos
+            $offsetSupplierName.$offsetCustomerName.$hexPaymentTermsPad.$offsetDates.
+            $hexDocumentUniqueIdLengthPad.$hexDocumentUniqueIdFull.             //argumentos dinamicos
+            $hexSupplierNameLengthPad.$hexSupplierNameFull.
+            $hexCustomerNameLengthPad.$hexCustomerNameFull.
+            $hexDatesLengthPad.$hexDatesFull;
+
+        $data  = [
+            'jsonrpc'=>'2.0','method'=>'eth_call','params'=>[[
+                "from"=> self::ACCOUNT, "to"=> self::CONTRACT,"data"=> $call],'latest'
+            ],'id'=>67
+        ];
+
+        $this->unlockAccount();
+        $params= json_encode($data);
+        $handler = curl_init();
+        curl_setopt($handler, CURLOPT_URL, self::URl);
+        curl_setopt($handler, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($handler, CURLOPT_POST,true);
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec ($handler);
+        curl_close($handler);
+        $json=json_decode($response,true);
+        $result=$json['result'];
+        // ejemplo de resultado
+        //0x
+        //0000000000000000000000000000000000000000000000000000000000000020
+        $hexIndex = ltrim($result, '0');;// limpiar ceros a la izquierda
+
+        //return $this->Hex2String($hexIndex);
+        return $hexDocumentUniqueIdLength32;
+
+
+    }
+
+
 }
