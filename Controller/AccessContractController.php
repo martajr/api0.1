@@ -44,14 +44,6 @@ class AccessContractController extends FOSRestController
             $supplierName,$customerName,$paymentTerms,$invoiceDate,$expirationDate);
     }
 
-//GET /documents/{id}/pending /documents/pending
-//GET /documents/{id}/accepted /documents/accepted
-//GET /documents/{id}/paid /documents/paid
-//GET /documents/{id}/factoring/requested /documents/factoring/pending
-//GET /documents/{id}/factoring/requested /documents/factoring/requested
-//GET /documents/{id}/factoring/accepted /documents/factoring/accepted
-
-
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------CHECKS-------------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
@@ -190,69 +182,98 @@ class AccessContractController extends FOSRestController
     }
 
 
-//POST /documents/{id}/factoring/total   /documents/factoring/total
-//POST /documents/{id}/factoring/expirationDate
-///documents/factoring/expirationDate
-//POST /documents/{id}/financialInstitutionName /documents/financialInstitutionName
-
-//POST /documents/{id}/paymentDate   /documents/paymentDate
 
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------SETTERS------------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
 
     /**
-     * @Rest\Post("/setFactoringTotal")
+     * @Rest\Post("/documents/{id}/factoring/total")
      */
-    function setFactoringTotal(Request $request){
+    function setFactoringTotal($id,Request $request){
         $model= new Model();
-        $id = $request->get('id');
+        $factoringTotal= $request->get('factoringTotal');
+        return $model->setFactoringTotal($id,"","","","",$factoringTotal);
+    }
+    /**
+     * @Rest\Post("/documents/factoring/total")
+     */
+    function setFactoringTotalData(Request $request){
+        $model= new Model();
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        $factoringTotal = $request->get('factoringTotal');
-        return $model->setFactoringTotal($id,$invoiceNumber,$total,$supplierName,$customerName,$factoringTotal);
+        $factoringTotal= $request->get('factoringTotal');
+        return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$factoringTotal);
+    }
+
+
+    /**
+     * @Rest\Post("/documents/{id}/factoring/expirationDate")
+     */
+    function setFactoringExpirationDate($id,Request $request){
+        $model= new Model();
+        $factoringExpirationDate= $request->get('factoringExpirationDate');
+        return $model->setFactoringTotal($id,"","","","",$factoringExpirationDate);
     }
     /**
-     * @Rest\Post("/setFactoringExpirationDate")
+     * @Rest\Post("/documents/factoring/expirationDate")
      */
-    function setFactoringExpirationDate(Request $request){
+    function setFactoringExpirationDateData(Request $request){
         $model= new Model();
-        $id = $request->get('id');
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        $factoringExpirationDate = $request->get('factoringExpirationDate');
-        return $model->setFactoringTotal($id,$invoiceNumber,$total,$supplierName,$customerName,$factoringExpirationDate);
+        $factoringExpirationDate= $request->get('factoringExpirationDate');
+        return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$factoringExpirationDate);
+    }
+
+
+    /**
+     * @Rest\Post("/documents/{id}/financialInstitutionName")
+     */
+    function setFinancialInstitutionName($id,Request $request){
+        $model= new Model();
+        $financialInstitutionName= $request->get('financialInstitutionName');
+        return $model->setFinancialInstitutionName($id,"","","","",$financialInstitutionName);
     }
     /**
-     * @Rest\Post("/setFinancialInstitutionName")
+     * @Rest\Post("/documents/financialInstitutionName")
      */
-    function setFinancialInstitutionName(Request $request){
+    function setFinancialInstitutionNameData(Request $request){
         $model= new Model();
-        $id = $request->get('id');
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        $financialInstitutionName = $request->get('financialInstitutionName');
-        return $model->setFinancialInstitutionName($id,$invoiceNumber,$total,$supplierName,$customerName,$financialInstitutionName);
+        $financialInstitutionName= $request->get('financialInstitutionName');
+        return $model->setFinancialInstitutionName("",$invoiceNumber,$total,$supplierName,$customerName,$financialInstitutionName);
+    }
+
+
+    /**
+     * @Rest\Post("/documents/{id}/paymentDate")
+     */
+    function setPaymentDate($id,Request $request){
+        $model= new Model();
+        $paymentDate = $request->get('paymentDate');
+        return $model->setPaymentDate($id,"","","","",$paymentDate);
     }
     /**
-     * @Rest\Post("/setPaymentDate")
+     * @Rest\Post("/documents/paymentDate")
      */
-    function setPaymentDate(Request $request){
+    function setPaymentDateData(Request $request){
         $model= new Model();
-        $id = $request->get('id');
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
         $paymentDate = $request->get('paymentDate');
-        return $model->setPaymentDate($id,$invoiceNumber,$total,$supplierName,$customerName,$paymentDate);
+        return $model->setPaymentDate("",$invoiceNumber,$total,$supplierName,$customerName,$paymentDate);
     }
+
 
 //POST /documents/{id}/state/accepted   /documents/state/accepted
 
@@ -270,83 +291,160 @@ class AccessContractController extends FOSRestController
     /*-----------------------------------------------------------------------------------------*/
 
     /**
-     * @Rest\Post("/setStateAcceptedFromPending")
+     * @Rest\Post("/documents/{id}/state/accepted")
      */
-    function setStateAcceptedFromPending(Request $request){
+    function setStateAcceptedFromPending($id){
         $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->setStateAcceptedFromPending($id,$invoiceNumber,$total,$supplierName,$customerName);
+        return $model->setStateAcceptedFromPending($id,"","","","");
     }
     /**
-     * @Rest\Post("/setStatePaidfFromAccepted")
+     * @Rest\Post("/documents/state/accepted")
      */
-    function setStatePaidfFromAccepted(Request $request){
+    function setStateAcceptedFromPendingData(Request $request){
         $model= new Model();
-        $id = $request->get('id');
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->setStatePaidfFromAccepted($id,$invoiceNumber,$total,$supplierName,$customerName);
+        return $model->setStateAcceptedFromPending("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Post("/documents/{id}/state/paid")
+     */
+    function setStatePaidfFromAccepted($id){
+        $model= new Model();
+        return $model->setStatePaidfFromAccepted($id,"","","","");
     }
     /**
-     * @Rest\Post("/setFactoringStateRequested")
+     * @Rest\Post("/documents/state/paid")
      */
-    function setFactoringStateRequested(Request $request){
+    function setStatePaidfFromAcceptedData(Request $request){
         $model= new Model();
-        $id = $request->get('id');
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->setFactoringStateRequested($id,$invoiceNumber,$total,$supplierName,$customerName);
+        return $model->setStatePaidfFromAccepted("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+
+
+    /**
+     * @Rest\Post("/documents/{id}/factoringState/requested")
+     */
+    function setFactoringStateRequested($id){
+        $model= new Model();
+        return $model->setFactoringStateRequested($id,"","","","");
     }
     /**
-     * @Rest\Post("/setFactoringStateAcceptedFromRequested")
+     * @Rest\Post("/documents/factoringState/requested")
      */
-    function setFactoringStateAcceptedFromRequested(Request $request){
+    function setFactoringStateRequestedData(Request $request){
         $model= new Model();
-        $id = $request->get('id');
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->setFactoringStateAcceptedFromRequested($id,$invoiceNumber,$total,$supplierName,$customerName);
+        return $model->setFactoringStateRequested("",$invoiceNumber,$total,$supplierName,$customerName);
     }
 
-//DELETE /documents/{id}/  /documents/
 
-//GET /documents/count
+    /**
+     * @Rest\Post("/documents/{id}/factoringState/accepted")
+     */
+    function setFactoringStateAcceptedFromRequested($id){
+        $model= new Model();
+        return $model->setFactoringStateAcceptedFromRequested($id,"","","","");
+    }
+    /**
+    * @Rest\Post("/documents/factoringState/accepted")
+    */
+    function setFactoringStateAcceptedFromRequestedData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->setFactoringStateAcceptedFromRequested("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
 
-//GET /documents/{index}
 
-//GET /documents/ids
+    /*-----------------------------------------------------------------------------------------*/
+    /*----------------------------SETTERS ESTADOS PLUS INFO------------------------------------*/
+    /*-----------------------------------------------------------------------------------------*/
 
+    /**
+     * @Rest\Post("/documents/{id}/state/paidPlus")
+     */
+    function setStatePaidfFromAcceptedPlusInfo($id,Request $request){
+        $model= new Model();
+        $paymentDate = $request->get('paymentDate');
+        return $model->setStatePaidfFromAcceptedPlusInfo($id,"","","","",$paymentDate);
+    }
+    /**
+     * @Rest\Post("/documents/state/paidPlus")
+     */
+    function setStatePaidfFromAcceptedPlusInfoData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        $paymentDate = $request->get('paymentDate');
+        return $model->setStatePaidfFromAcceptedPlusInfo("",$invoiceNumber,$total,$supplierName,$customerName,$paymentDate);
+    }
 
+    /**
+     * @Rest\Post("/documents/{id}/factoringState/acceptedPlus")
+     */
+    function setFactoringStateAcceptedFromRequestedPlusInfo($id,Request $request){
+        $model= new Model();
+        $factoringTotal = $request->get('factoringTotal');
+        $factoringExpirationDate = $request->get('factoringExpirationDate');
+        $financialInstitutionName = $request->get('financialInstitutionName');
+        return $model->setFactoringStateAcceptedFromRequestedPlusInfo($id,"","","","",$factoringTotal,$factoringExpirationDate,$financialInstitutionName);
+    }
+    /**
+     * @Rest\Post("/documents/factoringState/acceptedPlus")
+     */
+    function setFactoringStateAcceptedFromRequestedPlusInfoData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        $factoringTotal = $request->get('factoringTotal');
+        $factoringExpirationDate = $request->get('factoringExpirationDate');
+        $financialInstitutionName = $request->get('financialInstitutionName');
+        return $model->setFactoringStateAcceptedFromRequestedPlusInfo("",$invoiceNumber,$total,$supplierName,$customerName,$factoringTotal,$factoringExpirationDate,$financialInstitutionName);
+    }
 
     /*-----------------------------------------------------------------------------------------*/
     /*-----------------------------------DELETE & INDEX----------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
 
     /**
-     * @Rest\Post("/deleteDocument")
+     * @Rest\Delete("/documents/{id}")
      */
-    function deleteDocument(Request $request){
+    function deleteDocument($id){
         $model= new Model();
-        $id = $request->get('id');
+        return $model->deleteDocument($id,"","","","");
+    }
+    /**
+     * @Rest\Delete("/documents")
+     */
+    function deleteDocumentData(Request $request){
+        $model= new Model();
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->deleteDocument($id,$invoiceNumber,$total,$supplierName,$customerName);
+        return $model->deleteDocument("",$invoiceNumber,$total,$supplierName,$customerName);
     }
 
     /**
-     * @Rest\Post("/getDocumentCount")
+     * @Rest\Get("/documents/count")
      */
     public function getDocumentCount()
     {
@@ -355,17 +453,16 @@ class AccessContractController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("/getDocumentAtIndex")
+     * @Rest\Get("/documents/{index}")
      */
-    public function getDocumentIdAtIndex(Request $request)
+    public function getDocumentIdAtIndex($index)
     {
         $model= new Model();
-        $index = $request->get('index');
         return $model->getDocumentIdAtIndex($index);
     }
 
     /**
-     * @Rest\Post("/getAllDocumentId")
+     * @Rest\Get("/documents/ids")
      */
     public function getAllDocumentId()
     {
@@ -382,286 +479,329 @@ class AccessContractController extends FOSRestController
     /*-----------------------------------------------------------------------------------------*/
 
     /**
-     * @Rest\Post("/getInvoiceNumber")
+     * @Rest\Get("/documents/{id}/invoiceNumber")
      */
-    function getInvoiceNumber(Request $request){
+    function getInvoiceNumber($id){
         $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getInvoiceNumber($id,$invoiceNumber,$total,$supplierName,$customerName);
+        return $model->getInvoiceNumber($id,"","","","");
     }
     /**
- * @Rest\Post("/getTotal")
- */
-    function getTotal(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getTotal($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getFactoringTotal")
- */
-    function getFactoringTotal(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getFactoringTotal($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getState")
- */
-    function getState(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getState($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getCurrency")
- */
-    function getCurrency(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getCurrency($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getPaymentType")
- */
-    function getPaymentType(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getPaymentType($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getSupplierName")
- */
-    function getSupplierName(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getSupplierName($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getCustomerName")
- */
-    function getCustomerName(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getCustomerName($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getFinancialInstitutionName")
- */
-    function getFinancialInstitutionName(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getFinancialInstitutionName($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getFactoringState")
- */
-    function getFactoringState(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getFactoringState($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getPaymentTerms")
- */
-    function getPaymentTerms(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getPaymentTerms($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getFiscalYear")
- */
-    function getFiscalYear(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getFiscalYear($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getInvoiceDate")
- */
-    function getInvoiceDate(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getInvoiceDate($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-    /**
- * @Rest\Post("/getExpirationDate")
- */
-    function getExpirationDate(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getExpirationDate($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }  /**
- * @Rest\Post("/getFactoringExpirationDate")
- */
-    function getFactoringExpirationDate(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getFactoringExpirationDate($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }  /**
- * @Rest\Post("/getPaymentDate")
- */
-    function getPaymentDate(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getPaymentDate($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }  /**
- * @Rest\Post("/getAll")
- */
-    function getAll(Request $request){
-        $model= new Model();
-        $id = $request->get('id');
-        $invoiceNumber = $request->get('invoiceNumber');
-        $total = $request->get('total');
-        $supplierName = $request->get('supplierName');
-        $customerName = $request->get('customerName');
-        return $model->getAll($id,$invoiceNumber,$total,$supplierName,$customerName);
-    }
-//    /**
-//     * @Rest\Get("/document/index/{index}")
-//     */
-//    public function getDocumentAtIndex($index)
-//    {
-//        $model= new AccessContractModel();
-//        return $model->getDocumentAtIndex($index);
-//    }
-//
-//    /**
-//     * @Rest\Post("/user/")
-//     */
-//    public function postAction(Request $request)
-//    {
-//        $data = new User;
-//        $name = $request->get('name');
-//        $role = $request->get('role');
-//        if(empty($name) || empty($role))
-//        {
-//            return new View("NULL VALUES ARE NOT ALLOWED", Response::HTTP_NOT_ACCEPTABLE);
-//        }
-//        $data->setName($name);
-//        $data->setRole($role);
-//        $em = $this->getDoctrine()->getManager();
-//        $em->persist($data);
-//        $em->flush();
-//        return new View("User Added Successfully", Response::HTTP_OK);
-//    }
-
-    /**
-     * @Route("/test")
+     * @Rest\Get("/documents/invoiceNumber")
      */
-    public function test()
-    {
-        //command server : C:\xampp\php\php.exe bin/console server:run
-        $modelC= new AccessContractModel();
+    function getInvoiceNumberData(Request $request){
         $model= new Model();
-
-        /*$foo1= $model->setExpirationDate("f1046a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459","tests write Expiration Date ");
-        $foo2= $model->setFinancialInstitutionName("f1046a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459","tests write financial institution name");
-        $foo3= $model->setPaymentDate("f1046a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459","tests write paymet date");
-        $foo4= $model->setFactoringExpirationDate("f1046a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459","tests write factoring expiration date");
-        $foo5= $model->setFactoringTotal("f1046a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459","tests write factoring total");
-        return new Response($foo1.$foo2.$foo3.$foo4.$foo5);*/
-        //$foo = $model->getInvoiceNumber("f1146a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459");
-        //$foo = $model->getDocumentCount();
-        //$foo = $model->getDocumentAtIndex(0);
-        //$foo = nl2br($model->getAll("f1146a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459"));
-        //$foo = $model->deleteDocument("id1");
-        //$foo = $model->deleteAll();
-        /*$foo = $model->insertDocument("f1146a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459",
-            "invoice numbre test","fiscal year test","total test","factoring total test",
-            "state test","currency test","payment type test","supplier name test",
-            "customer name test","finacial institutio name test","factoring state test",
-            "payment term test"," invoice date test","payment date test",
-            "expiration date test","factoring expiration date test");*/
-        //$foo = $model->getDocumentList();
-        //$foo = $model->exists("f1146a81aefa46a1e257855f2bb955ec07180ad96c47bc85b8faf2656b918459");
-//$foo= $model->getInvoiceNumber("id1");
-       // $foo= $model->getTotal("id1");
-        //$foo=$model->getState("id1");
-        //$foo=$model->exists("id4");
-        /*$foo = json_encode($model->insertNewDocument("identificador largo para testear","invoicenumber1","FY01","total1",
-        "c01","paymenttype1","suppliername1","customername1","paymentterms1",
-            "AAAA/MM/DD HH:ID:01","AAAA/MM/DD HH:ED:01"));*/
-        $foo=json_encode($model->exists("","invoicenumber1","total1"
-        ,"suppliername1","customername1"));
-        $foo=json_encode($model->setFactoringTotal("","invoicenumber1","total1"
-            ,"suppliername1","customername1","factoringTotal1"));
-        $foo=json_encode($model->getInvoiceNumber("3dbda9e306e2cb4f123b1c9ae2e9ba30c6309c1b540228542ebc71131b4dfe0b","invoicenumber1","total1"
-            ,"suppliername1","customername1"));
-        $foo=json_encode($model->getAll("3dbda9e306e2cb4f123b1c9ae2e9ba30c6309c1b540228542ebc71131b4dfe0b","invoicenumber1","total1"
-            ,"suppliername1","customername1"));
-        $foo=json_encode($model->getAllDocumentId());
-        $foo=json_encode( $model->insertNewDocument('invoiceNumber3','FY03',
-            'total3','c03','paymentType3', 'supplierName3',
-            'customerName3','paymentTerms3','AAAA/MM/DD HH:ID:03','AAAA/MM/DD HH:ED:03'));
-
-        return new Response($foo);
-
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getInvoiceNumber("",$invoiceNumber,$total,$supplierName,$customerName);
     }
+
+    /**
+     * @Rest\Get("/documents/{id}/total")
+     */
+    function getTotal($id){
+        $model= new Model();
+        return $model->getTotal($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/total")
+    */
+    function getTotalData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getTotal("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/factoringTotal")
+     */
+    function getFactoringTotal($id){
+        $model= new Model();
+        return $model->getFactoringTotal($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/factoringTotal")
+    */
+    function getFactoringTotalData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/state")
+     */
+    function getState($id){
+        $model= new Model();
+        return $model->getState($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/state")
+    */
+    function getStateData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getState("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/currency")
+     */
+    function getCurrency($id){
+        $model= new Model();
+        return $model->getCurrency($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/currency")
+    */
+    function getCurrencyData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getCurrency("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/paymentType")
+     */
+    function getPaymentType($id){
+        $model= new Model();
+        return $model->getPaymentType($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/paymentType")
+    */
+    function getPaymentTypeData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getPaymentType("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/supplierName")
+     */
+    function getSupplierName($id){
+        $model= new Model();
+        return $model->getSupplierName($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/supplierName")
+    */
+    function getSupplierNameData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getSupplierName("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/customerName")
+     */
+    function getCustomerName($id){
+        $model= new Model();
+        return $model->getCustomerName($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/customerName")
+    */
+    function getCustomerNameData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getCustomerName("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/financialInstitutionName")
+     */
+    function getFinancialInstitutionName($id){
+        $model= new Model();
+        return $model->getFinancialInstitutionName($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/financialInstitutionName")
+    */
+    function getFinancialInstitutionNameData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getFinancialInstitutionName("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/factoringState")
+     */
+    function getFactoringState($id){
+        $model= new Model();
+        return $model->getFactoringState($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/factoringState")
+    */
+    function getFactoringStateData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getFactoringState("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/paymentTerms")
+     */
+    function getPaymentTerms($id){
+        $model= new Model();
+        return $model->getPaymentTerms($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/paymentTerms")
+    */
+    function getPaymentTermsData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getPaymentTerms("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+
+    /**
+     * @Rest\Get("/documents/{id}/fiscalYear")
+     */
+    function getFiscalYear($id){
+        $model= new Model();
+        return $model->getFiscalYear($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/fiscalYear")
+    */
+    function getFiscalYearData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getFiscalYear("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/invoiceDate")
+     */
+    function getInvoiceDate($id){
+        $model= new Model();
+        return $model->getInvoiceDate($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/invoiceDate")
+    */
+    function getInvoiceDateData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getInvoiceDate("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/expirationDate")
+     */
+    function getExpirationDate($id){
+        $model= new Model();
+        return $model->getExpirationDate($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/expirationDate")
+    */
+    function getExpirationDateData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getExpirationDate("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/factoringExpirationDate")
+     */
+    function getFactoringExpirationDate($id){
+        $model= new Model();
+        return $model->getFactoringExpirationDate($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/factoringExpirationDate")
+    */
+    function getFactoringExpirationDateData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getFactoringExpirationDate("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+    /**
+     * @Rest\Get("/documents/{id}/paymentDate")
+     */
+    function getPaymentDate($id){
+        $model= new Model();
+        return $model->getPaymentDate($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/paymentDate")
+    */
+    function getPaymentDateData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getPaymentDate("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
+
+    /**
+     * @Rest\Get("/documents/{id}/all")
+     */
+    function getAll($id){
+        $model= new Model();
+        return $model->getAll($id,"","","","");
+    }
+    /**
+    * @Rest\Get("/documents/all")
+    */
+    function getAllData(Request $request){
+        $model= new Model();
+        $invoiceNumber = $request->get('invoiceNumber');
+        $total = $request->get('total');
+        $supplierName = $request->get('supplierName');
+        $customerName = $request->get('customerName');
+        return $model->getAll("",$invoiceNumber,$total,$supplierName,$customerName);
+    }
+
 
 }
