@@ -14,7 +14,42 @@ use AppBundle\Model\Utils;
 
 class Model
 {
+    function checkConection(){
+        $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+            return ['status'=>'CONNECTED'];
+        }else{
+            return ['status'=>'NOT_CONNECTED'];
+        }
+    }
 
+    function checkSync(){
+        $utils = new Utils();
+        if($utils->curlCheckNetSync()){
+            return ['status'=>'NODE_SYNC'];
+        }else{
+            return ['status'=>'NODE_NOT_SYNC'];
+        }
+    }
+
+    function checkTransaction($hashTx){
+        $utils = new Utils();
+        $result =$utils->curlCheckTransaction($hashTx);
+        if($utils->curlCheckNetConection()){
+        if($result['status']=='0x1') {
+            $status = 'SUCCESS';
+           }else{
+            $status = 'FAILURE';
+        }
+        $hashTx=$result['transactionHash'];
+        $gasUsed=hexdec(trim(substr($result['gasUsed'],2),"0"));
+        $blockNumber=hexdec(trim(substr($result['blockNumber'],2),"0"));
+        $blockHash=$result['blockHash'];
+        return ['status'=>$status,'hashTx'=>$hashTx,'gasUsed'=>$gasUsed,'blockNumber'=>$blockNumber,'blockHash'=>$blockHash];
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+    }
 
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------INSERT-------------------------------------------*/
@@ -28,15 +63,21 @@ class Model
         $utils = new Utils();
         $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
 
-        if(!($contract->exists($documentUniqueId))){
-             $dates = $fiscalYear . "-" . $invoiceDate . "-" . $expirationDate; //(FYFY-AAAA/MM/DD HH:MM:SS-AAAA/MM/DD HH:MM:SS)
-            $hashTx = $contract->insertDocument($documentUniqueId, $invoiceNumber, $total, $currency, $paymentType,
-                $supplierName, $customerName, $paymentTerms, $dates);
-            return ['documentUniqueId' => $documentUniqueId, 'hashTx' => $hashTx,'invoiceNumber'=>$invoiceNumber
-            ,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+        if($utils->curlCheckNetConection()){
+
+                if(!($contract->exists($documentUniqueId))){
+                     $dates = $fiscalYear . "-" . $invoiceDate . "-" . $expirationDate; //(FYFY-AAAA/MM/DD HH:MM:SS-AAAA/MM/DD HH:MM:SS)
+                    $hashTx = $contract->insertDocument($documentUniqueId, $invoiceNumber, $total, $currency, $paymentType,
+                        $supplierName, $customerName, $paymentTerms, $dates);
+                    return ['documentUniqueId' => $documentUniqueId, 'hashTx' => $hashTx,'invoiceNumber'=>$invoiceNumber
+                    ,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                }else{
+                    return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_ALREADY_EXIST',
+                        'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                }
+
         }else{
-            return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_ALREADY_EXIST',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
         }
     }
     /*-----------------------------------------------------------------------------------------*/
@@ -48,6 +89,8 @@ class Model
     {
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -57,12 +100,16 @@ class Model
         return ['documentUniqueId' => $documentUniqueId,"exists" => $answer,
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //documentIsPending
     function documentIsPending($id,$invoiceNumber, $total, $supplierName, $customerName)
     {
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -76,12 +123,18 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //documentIsAccepted
     function documentIsAccepted($id,$invoiceNumber, $total, $supplierName, $customerName)
     {
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -95,12 +148,18 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //documentFactoringIsPending
     function documentFactoringIsPending($id,$invoiceNumber, $total, $supplierName, $customerName)
     {
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -114,12 +173,18 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //documentFactoringIsRequested
     function documentFactoringIsRequested($id,$invoiceNumber, $total, $supplierName, $customerName)
     {
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -133,12 +198,18 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //documentFactoringIsAccepted
     function documentFactoringIsAccepted($id,$invoiceNumber, $total, $supplierName, $customerName)
     {
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -152,12 +223,18 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //documentIsPaid
     function documentIsPaid($id,$invoiceNumber, $total, $supplierName, $customerName)
     {
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -171,6 +248,10 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 
     /*-----------------------------------------------------------------------------------------*/
@@ -181,6 +262,8 @@ class Model
     function setFactoringTotal($id,$invoiceNumber, $total, $supplierName, $customerName,$factoringTotal){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -200,11 +283,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //setFactoringExpirationDate requiere factoring accepted
     function setFactoringExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName,$factoringExpirationDate){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -223,11 +312,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //setFinancialInstitutionName requiere factoring accepted
     function setFinancialInstitutionName($id,$invoiceNumber, $total, $supplierName, $customerName,$financialInstitutionName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -246,11 +341,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //setPaymentDate requiere paid
     function setPaymentDate($id,$invoiceNumber, $total, $supplierName, $customerName,$paymentDate){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -269,6 +370,10 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
     /*-----------------------------------------------------------------------------------------*/
     /*-----------------------------------SETTERS ESTADOS---------------------------------------*/
@@ -278,6 +383,8 @@ class Model
     function setStateAcceptedFromPending($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -296,11 +403,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //setStatePaidfFromAccepted requiere accepted
     function setStatePaidfFromAccepted($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -319,11 +432,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //setFactoringStateRequested requiere factoring pending
     function setFactoringStateRequested($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -342,11 +461,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //setFactoringStateAcceptedFromRequested requiere factoring requested
     function setFactoringStateAcceptedFromRequested($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -365,15 +490,22 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------SETTERS ESTADOS PLUS INFO------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
+
 //setStatePaidfFromAcceptedPlusInfo requiere accepted
     function setStatePaidfFromAcceptedPlusInfo($id,$invoiceNumber, $total, $supplierName, $customerName,$paymentDate){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -392,13 +524,19 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 
-    //setFactoringStateAcceptedFromRequestedPlusInfo requiere factoring requested
+//setFactoringStateAcceptedFromRequestedPlusInfo requiere factoring requested
     function setFactoringStateAcceptedFromRequestedPlusInfo($id,$invoiceNumber, $total, $supplierName, $customerName,
        $factoringTotal, $factoringExpirationDate, $financialInstitutionName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -419,6 +557,10 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 
     /*-----------------------------------------------------------------------------------------*/
@@ -429,6 +571,8 @@ class Model
     function deleteDocument($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -443,29 +587,52 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getDocumentCount
     function getDocumentCount(){
         $contract = new AccessContract();
+        $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         return ['Count'=>$contract->getDocumentCount()];
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getDocumentIdAtIndex
     function getDocumentIdAtIndex($index){
         $contract = new AccessContract();
+        $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         return ['documentUniqueId' => $contract->getDocumentAtIndex($index)];
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getAllDocumentId
     function getAllDocumentId(){
         $contract = new AccessContract();
+        $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         $count =$contract->getDocumentCount();
         $data =array();
         for ($i=0;$i<$count;$i++){
             $id=$contract->getDocumentAtIndex($i);
             array_push($data,$id);
         }
-
-
         return $data;
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 
     /*-----------------------------------------------------------------------------------------*/
@@ -476,6 +643,8 @@ class Model
     function getInvoiceNumber($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -490,11 +659,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getTotal
     function getTotal($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -508,11 +683,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getFactoringTotal
     function getFactoringTotal($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -526,11 +707,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getState
     function getState($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -544,11 +731,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getCurrency
     function getCurrency($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -562,11 +755,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getPaymentType
     function getPaymentType($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -581,11 +780,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getSupplierName
     function getSupplierName($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -600,11 +805,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getCustomerName
     function getCustomerName($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -618,11 +829,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getFinancialInstitutionName
     function getFinancialInstitutionName($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -636,11 +853,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getFactoringState
     function getFactoringState($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -655,11 +878,16 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getPaymentTerms
     function getPaymentTerms($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -673,12 +901,18 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //function getDates(bytes documentUniqueId) returns(bytes dates)
 //getFiscalYear
     function getFiscalYear($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -694,11 +928,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getInvoiceDate
     function getInvoiceDate($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -714,11 +954,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getExpirationDate
     function getExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -734,11 +980,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getFactoringExpirationDate
     function getFactoringExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -752,11 +1004,17 @@ class Model
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
+
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
     }
 //getPaymentDate
     function getPaymentDate($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -771,11 +1029,17 @@ class Model
                 'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
         }
 
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
+        }
+
     }
 //getAll
     function getAll($id,$invoiceNumber, $total, $supplierName, $customerName){
         $contract = new AccessContract();
         $utils = new Utils();
+        if($utils->curlCheckNetConection()){
+
         if(($id=="")){
             $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
         }else{
@@ -803,6 +1067,10 @@ class Model
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
                 'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+        }
+            
+        }else{
+            return ['error' =>'NOT_NETWORK_CONNECTION'];
         }
 
     }

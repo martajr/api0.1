@@ -16,6 +16,7 @@ class AccessContract
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------INSERT-------------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
+
 // function insertDocument(bytes documentUniqueId,bytes invoiceNumber,bytes total,bytes3 currency,
 //  bytes paymentType,bytes supplierName,bytes customerName,bytes paymentTerms,bytes dates)
     function insertDocument($documentUniqueId,$invoiceNumber,$total, $currency,$paymentType, $supplierName,
@@ -548,8 +549,8 @@ class AccessContract
 
     }
 
-    //function setFactoringStateAcceptedFromRequestedPlusInfo(bytes documentUniqueId, bytes factoringTotal,
-    // bytes19 factoringExpirationDate, bytes financialInstitutionName)
+//function setFactoringStateAcceptedFromRequestedPlusInfo(bytes documentUniqueId, bytes factoringTotal,
+// bytes19 factoringExpirationDate, bytes financialInstitutionName)
     function setFactoringStateAcceptedFromRequestedPlusInfo($documentUniqueId,
      $factoringTotal, $factoringExpirationDate, $financialInstitutionName){
         $utils= new Utils();
@@ -661,6 +662,7 @@ class AccessContract
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------GETTERS------------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
+
 //function getInvoiceNumber(bytes documentUniqueId) returns(bytes invoiceNumber)
     function getInvoiceNumber($documentUniqueId){
         $utils= new Utils();

@@ -21,6 +21,31 @@ use FOS\RestBundle\Controller\FOSRestController;
 class AccessContractController extends FOSRestController
 {
 
+    /**
+     * @Rest\Get("/net/connection")
+     */
+    function checkConection(){
+        $model= new Model();
+        return $model->checkConection();
+    }
+
+    /**
+     * @Rest\Get("/net/sync")
+     */
+    function checkSync(Request $request){
+        $model= new Model();
+        return $model->checkSync();
+    }
+
+    /**
+     * @Rest\Get("/transaction/{hashTx}")
+     */
+    function checkTransaction($hashTx){
+        $model= new Model();
+        return $model->checkTransaction($hashTx);
+    }
+
+
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------INSERT-------------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
@@ -182,7 +207,6 @@ class AccessContractController extends FOSRestController
     }
 
 
-
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------SETTERS------------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
@@ -208,7 +232,6 @@ class AccessContractController extends FOSRestController
         return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$factoringTotal);
     }
 
-
     /**
      * @Rest\Post("/documents/{id}/factoring/expirationDate")
      */
@@ -230,7 +253,6 @@ class AccessContractController extends FOSRestController
         return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$factoringExpirationDate);
     }
 
-
     /**
      * @Rest\Post("/documents/{id}/financialInstitutionName")
      */
@@ -251,7 +273,6 @@ class AccessContractController extends FOSRestController
         $financialInstitutionName= $request->get('financialInstitutionName');
         return $model->setFinancialInstitutionName("",$invoiceNumber,$total,$supplierName,$customerName,$financialInstitutionName);
     }
-
 
     /**
      * @Rest\Post("/documents/{id}/paymentDate")
@@ -275,17 +296,6 @@ class AccessContractController extends FOSRestController
     }
 
 
-//POST /documents/{id}/state/accepted   /documents/state/accepted
-
-//POST /documents/{id}/state/paid  /documents/state/paid
-
-//POST /documents/{id}/state/paidPlus  /documents/state/paidPlus
-
-//POST /documents/{id}/factoringState/requested   /documents/factoringState/requested
-
-//POST /documents/{id}/factoringState/accepted   /documents/factoringState/accepted
-
-//POST /documents/{id}/factoringState/acceptedPlus   /documents/factoringState/acceptedPlus
     /*-----------------------------------------------------------------------------------------*/
     /*-----------------------------------SETTERS ESTADOS---------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
@@ -328,8 +338,6 @@ class AccessContractController extends FOSRestController
         return $model->setStatePaidfFromAccepted("",$invoiceNumber,$total,$supplierName,$customerName);
     }
 
-
-
     /**
      * @Rest\Post("/documents/{id}/factoringState/requested")
      */
@@ -348,7 +356,6 @@ class AccessContractController extends FOSRestController
         $customerName = $request->get('customerName');
         return $model->setFactoringStateRequested("",$invoiceNumber,$total,$supplierName,$customerName);
     }
-
 
     /**
      * @Rest\Post("/documents/{id}/factoringState/accepted")
@@ -462,7 +469,7 @@ class AccessContractController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/documents/ids")
+     * @Rest\Get("/documents")
      */
     public function getAllDocumentId()
     {
@@ -470,9 +477,6 @@ class AccessContractController extends FOSRestController
         return $model->getAllDocumentId();
     }
 
-//GET /documents/{id}/<DATO>  /documents/<DATO>
-
-//GET /documents/{id}/all  /documents/all
 
     /*-----------------------------------------------------------------------------------------*/
     /*----------------------------------------GETTERS------------------------------------------*/
@@ -687,7 +691,6 @@ class AccessContractController extends FOSRestController
         return $model->getPaymentTerms("",$invoiceNumber,$total,$supplierName,$customerName);
     }
 
-
     /**
      * @Rest\Get("/documents/{id}/fiscalYear")
      */
@@ -802,6 +805,5 @@ class AccessContractController extends FOSRestController
         $customerName = $request->get('customerName');
         return $model->getAll("",$invoiceNumber,$total,$supplierName,$customerName);
     }
-
 
 }

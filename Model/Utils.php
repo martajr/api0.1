@@ -38,7 +38,7 @@ class Utils
         return $json;
     }
     // llamada a eth_sendTransaction
-   function curlRequestSendTransaction($bytecode)
+    function curlRequestSendTransaction($bytecode)
     {
 
         $data = [
@@ -58,6 +58,73 @@ class Utils
         $json = json_decode($response, true);
         return $json;
     }
+    function curlCheckNetConection()
+{
+
+    $data = [
+        'jsonrpc' => '2.0', 'method' => 'net_listening', 'params' => [], 'id' => 67];
+    $params = json_encode($data);
+    $handler = curl_init();
+    curl_setopt($handler, CURLOPT_URL, self::URl);
+    curl_setopt($handler, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($handler, CURLOPT_POST, true);
+    curl_setopt($handler, CURLOPT_POSTFIELDS, $params);
+    curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($handler);
+    curl_close($handler);
+    $json = json_decode($response, true);
+    $result=$json['result'];
+    if($result){
+        return true;
+    }else {
+        return false;
+    }
+//    return $json;
+}
+
+    function curlCheckNetSync()
+    {
+        $data = [
+            'jsonrpc' => '2.0', 'method' => 'eth_syncing', 'params' => [], 'id' => 67];
+        $params = json_encode($data);
+        $handler = curl_init();
+        curl_setopt($handler, CURLOPT_URL, self::URl);
+        curl_setopt($handler, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($handler, CURLOPT_POST, true);
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($handler);
+        curl_close($handler);
+        $json = json_decode($response, true);
+        $result=$json['result'];
+        if(!$result){
+            return true;
+        }else {
+            return false;
+        }
+//        return $json;
+    }
+    function curlCheckTransaction($hashTx)
+    {
+        $data = [
+            'jsonrpc' => '2.0', 'method' => 'eth_getTransactionReceipt', 'params' => [$hashTx], 'id' => 67
+        ];
+        $params = json_encode($data);
+        $this->unlockAccount();
+        $handler = curl_init();
+        curl_setopt($handler, CURLOPT_URL, self::URl);
+        curl_setopt($handler, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($handler, CURLOPT_POST, true);
+        curl_setopt($handler, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($handler, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($handler);
+        curl_close($handler);
+        $json = json_decode($response, true);
+        $result=$json['result'];
+        return $result;
+//        return $json;
+    }
+
 
     private function unlockAccount(){
         // curl -X POST --data '{"jsonrpc":"2.0","method":"personal_unlockAccount","params":["0x7642b...", "password", 3600],"id":67}' http://localhost:8545
