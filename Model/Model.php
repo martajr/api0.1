@@ -61,7 +61,7 @@ class Model
                                $invoiceDate,$expirationDate){
         $contract = new AccessContract();
         $utils = new Utils();
-        $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+        $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
 
         if($utils->curlCheckNetConection()){
 
@@ -70,10 +70,10 @@ class Model
                     $hashTx = $contract->insertDocument($documentUniqueId, $invoiceNumber, $total, $currency, $paymentType,
                         $supplierName, $customerName, $paymentTerms, $dates);
                     return ['documentUniqueId' => $documentUniqueId, 'hashTx' => $hashTx,'invoiceNumber'=>$invoiceNumber
-                    ,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    ,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
                 }else{
                     return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_ALREADY_EXIST',
-                        'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                        'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
                 }
 
         }else{
@@ -85,43 +85,43 @@ class Model
     /*-----------------------------------------------------------------------------------------*/
 
 //exists
-    function exists($id,$invoiceNumber, $total, $supplierName, $customerName)
+    function exists($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear)
     {
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         $answer = $contract->exists($documentUniqueId);
         return ['documentUniqueId' => $documentUniqueId,"exists" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
 
         }else{
             return ['error' =>'NOT_NETWORK_CONNECTION'];
         }
     }
 //documentIsPending
-    function documentIsPending($id,$invoiceNumber, $total, $supplierName, $customerName)
+    function documentIsPending($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear)
     {
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->documentIsPending($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"documentIsPending" => $answer,
-            'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+            'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -129,24 +129,24 @@ class Model
         }
     }
 //documentIsAccepted
-    function documentIsAccepted($id,$invoiceNumber, $total, $supplierName, $customerName)
+    function documentIsAccepted($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear)
     {
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->documentIsAccepted($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"documentIsAccepted" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -154,24 +154,24 @@ class Model
         }
     }
 //documentFactoringIsPending
-    function documentFactoringIsPending($id,$invoiceNumber, $total, $supplierName, $customerName)
+    function documentFactoringIsPending($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear)
     {
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->documentFactoringIsPending($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"documentFactoringIsPending" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -179,24 +179,24 @@ class Model
         }
     }
 //documentFactoringIsRequested
-    function documentFactoringIsRequested($id,$invoiceNumber, $total, $supplierName, $customerName)
+    function documentFactoringIsRequested($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear)
     {
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->documentFactoringIsRequested($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"documentFactoringIsRequested" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -204,24 +204,24 @@ class Model
         }
     }
 //documentFactoringIsAccepted
-    function documentFactoringIsAccepted($id,$invoiceNumber, $total, $supplierName, $customerName)
+    function documentFactoringIsAccepted($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear)
     {
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->documentFactoringIsAccepted($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"documentFactoringIsAccepted" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -229,24 +229,24 @@ class Model
         }
     }
 //documentIsPaid
-    function documentIsPaid($id,$invoiceNumber, $total, $supplierName, $customerName)
+    function documentIsPaid($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear)
     {
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->documentIsPaid($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"documentIsPaid" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -259,13 +259,13 @@ class Model
     /*-----------------------------------------------------------------------------------------*/
 
 //setFactoringTotal requiere factoring accepted
-    function setFactoringTotal($id,$invoiceNumber, $total, $supplierName, $customerName,$factoringTotal){
+    function setFactoringTotal($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear,$factoringTotal){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -273,14 +273,14 @@ class Model
             if($contract->documentFactoringIsAccepted($documentUniqueId)){
                 $hashTx = $contract->setFactoringTotal($documentUniqueId,$factoringTotal);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,'factoringTotal'=>$factoringTotal,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_FACTORING_NOT_ACCEPTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -289,13 +289,13 @@ class Model
 
     }
 //setFactoringExpirationDate requiere factoring accepted
-    function setFactoringExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName,$factoringExpirationDate){
+    function setFactoringExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear,$factoringExpirationDate){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -303,14 +303,14 @@ class Model
             if($contract->documentFactoringIsAccepted($documentUniqueId)){
                 $hashTx = $contract->setFactoringExpirationDate($documentUniqueId,$factoringExpirationDate);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,'factoringExpirationDate'=>$factoringExpirationDate,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_FACTORING_NOT_ACCEPTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -318,13 +318,13 @@ class Model
         }
     }
 //setFinancialInstitutionName requiere factoring accepted
-    function setFinancialInstitutionName($id,$invoiceNumber, $total, $supplierName, $customerName,$financialInstitutionName){
+    function setFinancialInstitutionName($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear,$financialInstitutionName){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -332,14 +332,14 @@ class Model
             if($contract->documentFactoringIsAccepted($documentUniqueId)){
                 $hashTx = $contract->setFinancialInstitutionName($documentUniqueId,$financialInstitutionName);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,'financialInstitutionName'=>$financialInstitutionName,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_FACTORING_NOT_ACCEPTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -347,13 +347,13 @@ class Model
         }
     }
 //setPaymentDate requiere paid
-    function setPaymentDate($id,$invoiceNumber, $total, $supplierName, $customerName,$paymentDate){
+    function setPaymentDate($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear,$paymentDate){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -361,14 +361,14 @@ class Model
             if($contract->documentIsPaid($documentUniqueId)){
                 $hashTx = $contract->setPaymentDate($documentUniqueId,$paymentDate);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,'paymentDate'=>$paymentDate,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_PAID',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -380,13 +380,13 @@ class Model
     /*-----------------------------------------------------------------------------------------*/
 
 //setStateAcceptedFromPending requiere pending
-    function setStateAcceptedFromPending($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function setStateAcceptedFromPending($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -394,14 +394,14 @@ class Model
             if($contract->documentIsPending($documentUniqueId)){
                 $hashTx = $contract->setStateAcceptedFromPending($documentUniqueId);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_PENDING',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -409,28 +409,28 @@ class Model
         }
     }
 //setStatePaidfFromAccepted requiere accepted
-    function setStatePaidfFromAccepted($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function setStatePaidfFromAccepted($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             if($contract->documentIsAccepted($documentUniqueId)){
-                $hashTx = $contract->setStatePaidfFromAccepted($documentUniqueId);
+                $hashTx = $contract->setStatePaidFromAccepted($documentUniqueId);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_ACCEPTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -438,13 +438,13 @@ class Model
         }
     }
 //setFactoringStateRequested requiere factoring pending
-    function setFactoringStateRequested($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function setFactoringStateRequested($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -452,14 +452,14 @@ class Model
             if($contract->documentFactoringIsPending($documentUniqueId)){
                 $hashTx = $contract->setFactoringStateRequested($documentUniqueId);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_FACTORING_ACCEPTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -467,13 +467,13 @@ class Model
         }
     }
 //setFactoringStateAcceptedFromRequested requiere factoring requested
-    function setFactoringStateAcceptedFromRequested($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function setFactoringStateAcceptedFromRequested($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -481,14 +481,14 @@ class Model
             if($contract->documentFactoringIsRequested($documentUniqueId)){
                 $hashTx = $contract->setFactoringStateAcceptedFromRequested($documentUniqueId);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_FACTORING_REQUESTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -500,29 +500,29 @@ class Model
     /*----------------------------SETTERS ESTADOS PLUS INFO------------------------------------*/
     /*-----------------------------------------------------------------------------------------*/
 
-//setStatePaidfFromAcceptedPlusInfo requiere accepted
-    function setStatePaidfFromAcceptedPlusInfo($id,$invoiceNumber, $total, $supplierName, $customerName,$paymentDate){
+//setStatePaidFromAcceptedPlusInfo requiere accepted
+    function setStatePaidFromAcceptedPlusInfo($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear,$paymentDate){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             if($contract->documentIsAccepted($documentUniqueId)){
-                $hashTx = $contract->setStatePaidfFromAcceptedPlusInfo($documentUniqueId,$paymentDate);
+                $hashTx = $contract->setStatePaidFromAcceptedPlusInfo($documentUniqueId,$paymentDate);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,'paymentDate'=>$paymentDate,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_ACCEPTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -531,14 +531,14 @@ class Model
     }
 
 //setFactoringStateAcceptedFromRequestedPlusInfo requiere factoring requested
-    function setFactoringStateAcceptedFromRequestedPlusInfo($id,$invoiceNumber, $total, $supplierName, $customerName,
+    function setFactoringStateAcceptedFromRequestedPlusInfo($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear,
        $factoringTotal, $factoringExpirationDate, $financialInstitutionName){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -548,14 +548,14 @@ class Model
                     $factoringExpirationDate, $financialInstitutionName);
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,'factoringTotal'=>$factoringTotal
                     ,'factoringExpirationDate'=> $factoringExpirationDate, 'financialInstitutionName'=> $financialInstitutionName,
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
                 return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_FACTORING_REQUESTED',
-                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                    'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -568,23 +568,23 @@ class Model
     /*-----------------------------------------------------------------------------------------*/
 
 //deleteDocument
-    function deleteDocument($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function deleteDocument($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $hashTx= $contract->deleteDocument($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"hashTx" => $hashTx,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -640,23 +640,23 @@ class Model
     /*-----------------------------------------------------------------------------------------*/
 
 // getInvoiceNumber
-    function getInvoiceNumber($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getInvoiceNumber($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getInvoiceNumber($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"InvoiceNumber" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -665,23 +665,23 @@ class Model
 
     }
 //getTotal
-    function getTotal($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getTotal($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer =  $contract->getTotal($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"Total" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -689,23 +689,23 @@ class Model
         }
     }
 //getFactoringTotal
-    function getFactoringTotal($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getFactoringTotal($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getFactoringTotal($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"FactoringTotal" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -713,23 +713,23 @@ class Model
         }
     }
 //getState
-    function getState($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getState($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getState($documentUniqueId);;
             return ['documentUniqueId' => $documentUniqueId,"State" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -737,23 +737,23 @@ class Model
         }
     }
 //getCurrency
-    function getCurrency($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getCurrency($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getCurrency($documentUniqueId);;
             return ['documentUniqueId' => $documentUniqueId,"Currency" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -761,23 +761,23 @@ class Model
         }
     }
 //getPaymentType
-    function getPaymentType($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getPaymentType($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getPaymentType($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,'PaymentType' => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -786,23 +786,23 @@ class Model
 
     }
 //getSupplierName
-    function getSupplierName($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getSupplierName($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getSupplierName($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"SupplierName" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -811,23 +811,23 @@ class Model
 
     }
 //getCustomerName
-    function getCustomerName($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getCustomerName($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getCustomerName($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"CustomerName" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -835,23 +835,23 @@ class Model
         }
     }
 //getFinancialInstitutionName
-    function getFinancialInstitutionName($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getFinancialInstitutionName($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getFinancialInstitutionName($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"FinancialInstitutionName" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -859,23 +859,23 @@ class Model
         }
     }
 //getFactoringState
-    function getFactoringState($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getFactoringState($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getFactoringState($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"FactoringState" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -883,23 +883,23 @@ class Model
         }
     }
 //getPaymentTerms
-    function getPaymentTerms($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getPaymentTerms($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getPaymentTerms($documentUniqueId);;
             return ['documentUniqueId' => $documentUniqueId,"PaymentTerms" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -908,13 +908,13 @@ class Model
     }
 //function getDates(bytes documentUniqueId) returns(bytes dates)
 //getFiscalYear
-    function getFiscalYear($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getFiscalYear($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -922,10 +922,10 @@ class Model
             $dates= $contract->getDates($documentUniqueId);
             $answer= substr($dates,0,4);
             return ['documentUniqueId' => $documentUniqueId,"FiscalYear" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -934,13 +934,13 @@ class Model
 
     }
 //getInvoiceDate
-    function getInvoiceDate($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getInvoiceDate($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -948,10 +948,10 @@ class Model
             $dates= $contract->getDates($documentUniqueId);
             $answer= substr($dates,5,19);
             return ['documentUniqueId' => $documentUniqueId,"InvoiceDate" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -960,13 +960,13 @@ class Model
 
     }
 //getExpirationDate
-    function getExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
@@ -974,10 +974,10 @@ class Model
             $dates= $contract->getDates($documentUniqueId);
             $answer= substr($dates,25,19);
             return ['documentUniqueId' => $documentUniqueId,"ExpirationDate" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -986,23 +986,23 @@ class Model
 
     }
 //getFactoringExpirationDate
-    function getFactoringExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getFactoringExpirationDate($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getFactoringExpirationDate($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"FactoringExpirationDate" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -1010,23 +1010,23 @@ class Model
         }
     }
 //getPaymentDate
-    function getPaymentDate($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getPaymentDate($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
             $answer = $contract->getPaymentDate($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,"PaymentDate" => $answer,
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'$total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
 
         }else{
@@ -1035,18 +1035,17 @@ class Model
 
     }
 //getAll
-    function getAll($id,$invoiceNumber, $total, $supplierName, $customerName){
+    function getAll($id,$invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
         $contract = new AccessContract();
         $utils = new Utils();
         if($utils->curlCheckNetConection()){
 
         if(($id=="")){
-            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName);
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
         }else{
             $documentUniqueId = $id;
         }
         if($contract->exists($documentUniqueId)){
-            $answer = $contract->getPaymentDate($documentUniqueId);
             return ['documentUniqueId' => $documentUniqueId,
                 'InvoiceNumber'=> $contract->getInvoiceNumber($documentUniqueId),
                 'Total'=> $contract->getTotal($documentUniqueId),
@@ -1063,12 +1062,12 @@ class Model
                 'ExpirationDate'=> substr($contract->getDates($documentUniqueId),25,19),
                 'FactoringExpirationDate' => $contract->getFactoringExpirationDate($documentUniqueId) ,
                 'PaymentDate' => $contract->getPaymentDate($documentUniqueId),
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }else{
             return ['documentUniqueId' => $documentUniqueId,'error' =>'ID_NOT_EXISTS',
-                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName];
+                'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
         }
-            
+
         }else{
             return ['error' =>'NOT_NETWORK_CONNECTION'];
         }

@@ -9,7 +9,7 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Model\AccessContractModel;
+
 use AppBundle\Model\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,7 +32,7 @@ class AccessContractController extends FOSRestController
     /**
      * @Rest\Get("/net/sync")
      */
-    function checkSync(Request $request){
+    function checkSync(){
         $model= new Model();
         return $model->checkSync();
     }
@@ -78,7 +78,7 @@ class AccessContractController extends FOSRestController
      */
     function exists($id){
         $model= new Model();
-        return $model->exists($id,"","","","");
+        return $model->exists($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/exists")
@@ -89,7 +89,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->exists("",$invoiceNumber ,$total, $supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->exists("",$invoiceNumber ,$total, $supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -97,7 +98,7 @@ class AccessContractController extends FOSRestController
      */
     function documentIsPending($id){
         $model= new Model();
-        return $model->documentIsPending($id,"","","","");
+        return $model->documentIsPending($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/pending")
@@ -108,7 +109,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->documentIsPending("",$invoiceNumber ,$total, $supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->documentIsPending("",$invoiceNumber ,$total, $supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -116,7 +118,7 @@ class AccessContractController extends FOSRestController
      */
     function documentIsAccepted($id){
         $model= new Model();
-        return $model->documentIsAccepted($id,"","","","");
+        return $model->documentIsAccepted($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/accepted")
@@ -127,7 +129,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->documentIsAccepted("",$invoiceNumber ,$total, $supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->documentIsAccepted("",$invoiceNumber ,$total, $supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -135,7 +138,7 @@ class AccessContractController extends FOSRestController
      */
     function documentFactoringIsPending($id){
         $model= new Model();
-        return $model->documentFactoringIsPending($id,"","","","");
+        return $model->documentFactoringIsPending($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/factoring/pending")
@@ -146,7 +149,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->documentFactoringIsPending("",$invoiceNumber ,$total, $supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->documentFactoringIsPending("",$invoiceNumber ,$total, $supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -154,7 +158,7 @@ class AccessContractController extends FOSRestController
      */
     function documentFactoringIsRequested($id){
         $model= new Model();
-        return $model->documentFactoringIsRequested($id,"","","","");
+        return $model->documentFactoringIsRequested($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/factoring/requested")
@@ -165,7 +169,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->documentFactoringIsRequested("",$invoiceNumber ,$total, $supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->documentFactoringIsRequested("",$invoiceNumber ,$total, $supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -173,7 +178,7 @@ class AccessContractController extends FOSRestController
      */
     function documentFactoringIsAccepted($id){
         $model= new Model();
-        return $model->documentFactoringIsAccepted($id,"","","","");
+        return $model->documentFactoringIsAccepted($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/factoring/accepted")
@@ -184,7 +189,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->documentFactoringIsAccepted("",$invoiceNumber ,$total, $supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->documentFactoringIsAccepted("",$invoiceNumber ,$total, $supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -192,7 +198,7 @@ class AccessContractController extends FOSRestController
      */
     function documentIsPaid($id){
         $model= new Model();
-        return $model->documentIsPaid($id,"","","","");
+        return $model->documentIsPaid($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/paid")
@@ -203,7 +209,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->documentIsPaid("",$invoiceNumber ,$total, $supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->documentIsPaid("",$invoiceNumber ,$total, $supplierName,$customerName,$fiscalYear);
     }
 
 
@@ -217,7 +224,7 @@ class AccessContractController extends FOSRestController
     function setFactoringTotal($id,Request $request){
         $model= new Model();
         $factoringTotal= $request->get('factoringTotal');
-        return $model->setFactoringTotal($id,"","","","",$factoringTotal);
+        return $model->setFactoringTotal($id,"","","","","",$factoringTotal);
     }
     /**
      * @Rest\Post("/documents/factoring/total")
@@ -229,7 +236,8 @@ class AccessContractController extends FOSRestController
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
         $factoringTotal= $request->get('factoringTotal');
-        return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$factoringTotal);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$factoringTotal);
     }
 
     /**
@@ -238,7 +246,7 @@ class AccessContractController extends FOSRestController
     function setFactoringExpirationDate($id,Request $request){
         $model= new Model();
         $factoringExpirationDate= $request->get('factoringExpirationDate');
-        return $model->setFactoringTotal($id,"","","","",$factoringExpirationDate);
+        return $model->setFactoringTotal($id,"","","","","",$factoringExpirationDate);
     }
     /**
      * @Rest\Post("/documents/factoring/expirationDate")
@@ -250,7 +258,8 @@ class AccessContractController extends FOSRestController
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
         $factoringExpirationDate= $request->get('factoringExpirationDate');
-        return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$factoringExpirationDate);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$factoringExpirationDate);
     }
 
     /**
@@ -259,7 +268,7 @@ class AccessContractController extends FOSRestController
     function setFinancialInstitutionName($id,Request $request){
         $model= new Model();
         $financialInstitutionName= $request->get('financialInstitutionName');
-        return $model->setFinancialInstitutionName($id,"","","","",$financialInstitutionName);
+        return $model->setFinancialInstitutionName($id,"","","","","",$financialInstitutionName);
     }
     /**
      * @Rest\Post("/documents/financialInstitutionName")
@@ -271,7 +280,8 @@ class AccessContractController extends FOSRestController
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
         $financialInstitutionName= $request->get('financialInstitutionName');
-        return $model->setFinancialInstitutionName("",$invoiceNumber,$total,$supplierName,$customerName,$financialInstitutionName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setFinancialInstitutionName("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$financialInstitutionName);
     }
 
     /**
@@ -280,7 +290,7 @@ class AccessContractController extends FOSRestController
     function setPaymentDate($id,Request $request){
         $model= new Model();
         $paymentDate = $request->get('paymentDate');
-        return $model->setPaymentDate($id,"","","","",$paymentDate);
+        return $model->setPaymentDate($id,"","","","","",$paymentDate);
     }
     /**
      * @Rest\Post("/documents/paymentDate")
@@ -292,7 +302,8 @@ class AccessContractController extends FOSRestController
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
         $paymentDate = $request->get('paymentDate');
-        return $model->setPaymentDate("",$invoiceNumber,$total,$supplierName,$customerName,$paymentDate);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setPaymentDate("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$paymentDate);
     }
 
 
@@ -305,7 +316,7 @@ class AccessContractController extends FOSRestController
      */
     function setStateAcceptedFromPending($id){
         $model= new Model();
-        return $model->setStateAcceptedFromPending($id,"","","","");
+        return $model->setStateAcceptedFromPending($id,"","","","","");
     }
     /**
      * @Rest\Post("/documents/state/accepted")
@@ -316,7 +327,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->setStateAcceptedFromPending("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setStateAcceptedFromPending("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -324,7 +336,7 @@ class AccessContractController extends FOSRestController
      */
     function setStatePaidfFromAccepted($id){
         $model= new Model();
-        return $model->setStatePaidfFromAccepted($id,"","","","");
+        return $model->setStatePaidfFromAccepted($id,"","","","","");
     }
     /**
      * @Rest\Post("/documents/state/paid")
@@ -335,7 +347,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->setStatePaidfFromAccepted("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setStatePaidfFromAccepted("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -343,7 +356,7 @@ class AccessContractController extends FOSRestController
      */
     function setFactoringStateRequested($id){
         $model= new Model();
-        return $model->setFactoringStateRequested($id,"","","","");
+        return $model->setFactoringStateRequested($id,"","","","","");
     }
     /**
      * @Rest\Post("/documents/factoringState/requested")
@@ -354,7 +367,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->setFactoringStateRequested("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setFactoringStateRequested("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -362,7 +376,7 @@ class AccessContractController extends FOSRestController
      */
     function setFactoringStateAcceptedFromRequested($id){
         $model= new Model();
-        return $model->setFactoringStateAcceptedFromRequested($id,"","","","");
+        return $model->setFactoringStateAcceptedFromRequested($id,"","","","","");
     }
     /**
     * @Rest\Post("/documents/factoringState/accepted")
@@ -373,7 +387,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->setFactoringStateAcceptedFromRequested("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setFactoringStateAcceptedFromRequested("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
 
@@ -384,22 +399,23 @@ class AccessContractController extends FOSRestController
     /**
      * @Rest\Post("/documents/{id}/state/paidPlus")
      */
-    function setStatePaidfFromAcceptedPlusInfo($id,Request $request){
+    function setStatePaidFromAcceptedPlusInfo($id,Request $request){
         $model= new Model();
         $paymentDate = $request->get('paymentDate');
-        return $model->setStatePaidfFromAcceptedPlusInfo($id,"","","","",$paymentDate);
+        return $model->setStatePaidFromAcceptedPlusInfo($id,"","","","","",$paymentDate);
     }
     /**
      * @Rest\Post("/documents/state/paidPlus")
      */
-    function setStatePaidfFromAcceptedPlusInfoData(Request $request){
+    function setStatePaidFromAcceptedPlusInfoData(Request $request){
         $model= new Model();
         $invoiceNumber = $request->get('invoiceNumber');
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
         $paymentDate = $request->get('paymentDate');
-        return $model->setStatePaidfFromAcceptedPlusInfo("",$invoiceNumber,$total,$supplierName,$customerName,$paymentDate);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->setStatePaidFromAcceptedPlusInfo("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$paymentDate);
     }
 
     /**
@@ -410,7 +426,7 @@ class AccessContractController extends FOSRestController
         $factoringTotal = $request->get('factoringTotal');
         $factoringExpirationDate = $request->get('factoringExpirationDate');
         $financialInstitutionName = $request->get('financialInstitutionName');
-        return $model->setFactoringStateAcceptedFromRequestedPlusInfo($id,"","","","",$factoringTotal,$factoringExpirationDate,$financialInstitutionName);
+        return $model->setFactoringStateAcceptedFromRequestedPlusInfo($id,"","","","","",$factoringTotal,$factoringExpirationDate,$financialInstitutionName);
     }
     /**
      * @Rest\Post("/documents/factoringState/acceptedPlus")
@@ -421,10 +437,11 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
+        $fiscalYear = $request->get('fiscalYear');
         $factoringTotal = $request->get('factoringTotal');
         $factoringExpirationDate = $request->get('factoringExpirationDate');
         $financialInstitutionName = $request->get('financialInstitutionName');
-        return $model->setFactoringStateAcceptedFromRequestedPlusInfo("",$invoiceNumber,$total,$supplierName,$customerName,$factoringTotal,$factoringExpirationDate,$financialInstitutionName);
+        return $model->setFactoringStateAcceptedFromRequestedPlusInfo("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$factoringTotal,$factoringExpirationDate,$financialInstitutionName);
     }
 
     /*-----------------------------------------------------------------------------------------*/
@@ -436,7 +453,7 @@ class AccessContractController extends FOSRestController
      */
     function deleteDocument($id){
         $model= new Model();
-        return $model->deleteDocument($id,"","","","");
+        return $model->deleteDocument($id,"","","","","");
     }
     /**
      * @Rest\Delete("/documents")
@@ -447,7 +464,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->deleteDocument("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->deleteDocument("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -487,7 +505,7 @@ class AccessContractController extends FOSRestController
      */
     function getInvoiceNumber($id){
         $model= new Model();
-        return $model->getInvoiceNumber($id,"","","","");
+        return $model->getInvoiceNumber($id,"","","","","");
     }
     /**
      * @Rest\Get("/documents/invoiceNumber")
@@ -498,7 +516,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getInvoiceNumber("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getInvoiceNumber("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -506,7 +525,7 @@ class AccessContractController extends FOSRestController
      */
     function getTotal($id){
         $model= new Model();
-        return $model->getTotal($id,"","","","");
+        return $model->getTotal($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/total")
@@ -517,7 +536,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getTotal("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getTotal("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -525,7 +545,7 @@ class AccessContractController extends FOSRestController
      */
     function getFactoringTotal($id){
         $model= new Model();
-        return $model->getFactoringTotal($id,"","","","");
+        return $model->getFactoringTotal($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/factoringTotal")
@@ -536,7 +556,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -544,7 +565,7 @@ class AccessContractController extends FOSRestController
      */
     function getState($id){
         $model= new Model();
-        return $model->getState($id,"","","","");
+        return $model->getState($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/state")
@@ -555,7 +576,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getState("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getState("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -563,7 +585,7 @@ class AccessContractController extends FOSRestController
      */
     function getCurrency($id){
         $model= new Model();
-        return $model->getCurrency($id,"","","","");
+        return $model->getCurrency($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/currency")
@@ -574,7 +596,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getCurrency("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getCurrency("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -582,7 +605,7 @@ class AccessContractController extends FOSRestController
      */
     function getPaymentType($id){
         $model= new Model();
-        return $model->getPaymentType($id,"","","","");
+        return $model->getPaymentType($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/paymentType")
@@ -593,7 +616,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getPaymentType("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getPaymentType("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -601,7 +625,7 @@ class AccessContractController extends FOSRestController
      */
     function getSupplierName($id){
         $model= new Model();
-        return $model->getSupplierName($id,"","","","");
+        return $model->getSupplierName($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/supplierName")
@@ -612,7 +636,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getSupplierName("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getSupplierName("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -620,7 +645,7 @@ class AccessContractController extends FOSRestController
      */
     function getCustomerName($id){
         $model= new Model();
-        return $model->getCustomerName($id,"","","","");
+        return $model->getCustomerName($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/customerName")
@@ -631,7 +656,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getCustomerName("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getCustomerName("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -639,7 +665,7 @@ class AccessContractController extends FOSRestController
      */
     function getFinancialInstitutionName($id){
         $model= new Model();
-        return $model->getFinancialInstitutionName($id,"","","","");
+        return $model->getFinancialInstitutionName($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/financialInstitutionName")
@@ -650,7 +676,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getFinancialInstitutionName("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getFinancialInstitutionName("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -658,7 +685,7 @@ class AccessContractController extends FOSRestController
      */
     function getFactoringState($id){
         $model= new Model();
-        return $model->getFactoringState($id,"","","","");
+        return $model->getFactoringState($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/factoringState")
@@ -669,7 +696,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getFactoringState("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getFactoringState("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -677,7 +705,7 @@ class AccessContractController extends FOSRestController
      */
     function getPaymentTerms($id){
         $model= new Model();
-        return $model->getPaymentTerms($id,"","","","");
+        return $model->getPaymentTerms($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/paymentTerms")
@@ -688,7 +716,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getPaymentTerms("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getPaymentTerms("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -696,7 +725,7 @@ class AccessContractController extends FOSRestController
      */
     function getFiscalYear($id){
         $model= new Model();
-        return $model->getFiscalYear($id,"","","","");
+        return $model->getFiscalYear($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/fiscalYear")
@@ -707,7 +736,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getFiscalYear("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getFiscalYear("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -715,7 +745,7 @@ class AccessContractController extends FOSRestController
      */
     function getInvoiceDate($id){
         $model= new Model();
-        return $model->getInvoiceDate($id,"","","","");
+        return $model->getInvoiceDate($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/invoiceDate")
@@ -726,7 +756,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getInvoiceDate("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getInvoiceDate("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -734,7 +765,7 @@ class AccessContractController extends FOSRestController
      */
     function getExpirationDate($id){
         $model= new Model();
-        return $model->getExpirationDate($id,"","","","");
+        return $model->getExpirationDate($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/expirationDate")
@@ -745,7 +776,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getExpirationDate("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getExpirationDate("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -753,7 +785,7 @@ class AccessContractController extends FOSRestController
      */
     function getFactoringExpirationDate($id){
         $model= new Model();
-        return $model->getFactoringExpirationDate($id,"","","","");
+        return $model->getFactoringExpirationDate($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/factoringExpirationDate")
@@ -764,7 +796,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getFactoringExpirationDate("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getFactoringExpirationDate("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
     /**
@@ -772,7 +805,7 @@ class AccessContractController extends FOSRestController
      */
     function getPaymentDate($id){
         $model= new Model();
-        return $model->getPaymentDate($id,"","","","");
+        return $model->getPaymentDate($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/paymentDate")
@@ -783,7 +816,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getPaymentDate("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getPaymentDate("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
 
@@ -792,7 +826,7 @@ class AccessContractController extends FOSRestController
      */
     function getAll($id){
         $model= new Model();
-        return $model->getAll($id,"","","","");
+        return $model->getAll($id,"","","","","");
     }
     /**
     * @Rest\Get("/documents/all")
@@ -803,7 +837,8 @@ class AccessContractController extends FOSRestController
         $total = $request->get('total');
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
-        return $model->getAll("",$invoiceNumber,$total,$supplierName,$customerName);
+        $fiscalYear = $request->get('fiscalYear');
+        return $model->getAll("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 
 }

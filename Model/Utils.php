@@ -81,7 +81,6 @@ class Utils
     }
 //    return $json;
 }
-
     function curlCheckNetSync()
     {
         $data = [
@@ -144,8 +143,8 @@ class Utils
         curl_close($handler);
     }
     //generar identificador a partir de invoiceNumber, total, supplierName y customerName
-    function generateId($invoiceNumber, $total, $supplierName, $customerName){
-        $data=$invoiceNumber.$total.$supplierName.$customerName;
+    function generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear){
+        $data=$invoiceNumber.$total.$supplierName.$customerName.$fiscalYear;
         return hash ( "sha256",$data,false );
     }
     // devuelve la longitud de un argumento hexadecimal en bloques de 32 bytes para ajustarlo al formato
