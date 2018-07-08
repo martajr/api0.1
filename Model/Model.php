@@ -456,7 +456,7 @@ class Model
                 return ['documentUniqueId' => $documentUniqueId,'hashTx'=>$hashTx,
                     'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }else{
-                return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_FACTORING_ACCEPTED',
+                return ['documentUniqueId' => $documentUniqueId,'error' =>'DOCUMENT_NOT_FACTORING_PENDING',
                     'invoiceNumber'=>$invoiceNumber,'total'=>$total,'supplierName'=>$supplierName,'customerName'=>$customerName,"fiscalYear"=>$fiscalYear];
             }
         }else{

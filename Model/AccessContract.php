@@ -555,7 +555,7 @@ class AccessContract
      $factoringTotal, $factoringExpirationDate, $financialInstitutionName){
         $utils= new Utils();
         // firma del metodo
-        $signature = $utils->hexMethodSignature("setFactoringStateAcceptedFromRequested(bytes)");
+        $signature = $utils->hexMethodSignature("setFactoringStateAcceptedFromRequestedPlusInfo(bytes,bytes,bytes19,bytes)");
         // argumentos en hexadecimal
         $hexDocumentUniqueId = $utils-> stringToHex($documentUniqueId);
         $hexFactoringTotal = $utils-> stringToHex($factoringTotal);
