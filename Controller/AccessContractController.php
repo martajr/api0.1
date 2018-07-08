@@ -246,7 +246,7 @@ class AccessContractController extends FOSRestController
     function setFactoringExpirationDate($id,Request $request){
         $model= new Model();
         $factoringExpirationDate= $request->get('factoringExpirationDate');
-        return $model->setFactoringTotal($id,"","","","","",$factoringExpirationDate);
+        return $model->setFactoringExpirationDate($id,"","","","","",$factoringExpirationDate);
     }
     /**
      * @Rest\Post("/documents/factoring/expirationDate")
@@ -259,11 +259,11 @@ class AccessContractController extends FOSRestController
         $customerName = $request->get('customerName');
         $factoringExpirationDate= $request->get('factoringExpirationDate');
         $fiscalYear = $request->get('fiscalYear');
-        return $model->setFactoringTotal("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$factoringExpirationDate);
+        return $model->setFactoringExpirationDate("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear,$factoringExpirationDate);
     }
 
     /**
-     * @Rest\Post("/documents/{id}/financialInstitutionName")
+     * @Rest\Post("/documents/{id}/factoring/financialInstitutionName")
      */
     function setFinancialInstitutionName($id,Request $request){
         $model= new Model();
@@ -271,7 +271,7 @@ class AccessContractController extends FOSRestController
         return $model->setFinancialInstitutionName($id,"","","","","",$financialInstitutionName);
     }
     /**
-     * @Rest\Post("/documents/financialInstitutionName")
+     * @Rest\Post("/documents/factoring/financialInstitutionName")
      */
     function setFinancialInstitutionNameData(Request $request){
         $model= new Model();
@@ -478,7 +478,7 @@ class AccessContractController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/documents/{index}")
+     * @Rest\Get("/documents/index/{index}")
      */
     public function getDocumentIdAtIndex($index)
     {
@@ -577,6 +577,7 @@ class AccessContractController extends FOSRestController
         $supplierName = $request->get('supplierName');
         $customerName = $request->get('customerName');
         $fiscalYear = $request->get('fiscalYear');
+//        return $request;
         return $model->getState("",$invoiceNumber,$total,$supplierName,$customerName,$fiscalYear);
     }
 

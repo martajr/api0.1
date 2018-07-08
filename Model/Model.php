@@ -36,6 +36,7 @@ class Model
         $utils = new Utils();
         $result =$utils->curlCheckTransaction($hashTx);
         if($utils->curlCheckNetConection()){
+
         if($result['status']=='0x1') {
             $status = 'SUCCESS';
            }else{
@@ -46,6 +47,7 @@ class Model
         $blockNumber=hexdec(trim(substr($result['blockNumber'],2),"0"));
         $blockHash=$result['blockHash'];
         return ['status'=>$status,'hashTx'=>$hashTx,'gasUsed'=>$gasUsed,'blockNumber'=>$blockNumber,'blockHash'=>$blockHash];
+
         }else{
             return ['error' =>'NOT_NETWORK_CONNECTION'];
         }
@@ -1055,6 +1057,8 @@ class Model
                 'PaymentType'=> $contract->getPaymentType($documentUniqueId),
                 'SupplierName'=> $contract->getSupplierName($documentUniqueId),
                 'CustomerName'=> $contract->getCustomerName($documentUniqueId),
+                'CustomerName'=> $contract->getCustomerName($documentUniqueId),
+                'FinancialInstitutionName'=> $contract->getFinancialInstitutionName($documentUniqueId),
                 'FactoringState'=> $contract->getFactoringState($documentUniqueId),
                 'PaymentTerms'=> $contract->getPaymentTerms($documentUniqueId),
                 'FiscalYear'=> substr($contract->getDates($documentUniqueId),0,4),

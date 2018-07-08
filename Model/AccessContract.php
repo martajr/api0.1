@@ -32,7 +32,7 @@ class AccessContract
         $hexPaymentType = $utils-> stringToHex($paymentType);
         $hexSupplierName = $utils-> stringToHex($supplierName);
         $hexCustomerName = $utils-> stringToHex($customerName);
-        $hexPaymentTerms = $utils-> stringToHex($paymentTerms);
+        $hexPaymentTerms = dechex($paymentTerms);
         $hexDates = $utils-> stringToHex($dates);
         //tamaño de los argumentos dinamicos(bytes) sin dezplazar y desplazado
         $rawHexDocumentUniqueIdLength = strlen($hexDocumentUniqueId)/2;
@@ -67,7 +67,7 @@ class AccessContract
         $offsetDates =str_pad(dechex(32*9 +32+$hexDocumentUniqueIdLength32 +32+$hexInvoiceNumberLength32 +32+$hexTotalLength32 +32+$hexPaymentTypeLength32+32+$hexSupplierNameLength32 +32+$hexCustomerNameLength32), 64, "0", STR_PAD_LEFT);
         //argumentos no dinamicos desplazados
         $hexCurrencyPad = str_pad($hexCurrency, 64, "0");
-        $hexPaymentTermsPad = str_pad($hexPaymentTerms, 64, "0");
+        $hexPaymentTermsPad = str_pad($hexPaymentTerms, 64, "0",STR_PAD_LEFT);
         //argumentos dinamicos completados con ceros
         $hexDocumentUniqueIdFull = str_pad($hexDocumentUniqueId,  $hexDocumentUniqueIdLength32*2 , "0");
         $hexInvoiceNumberFull = str_pad($hexInvoiceNumber,  $hexInvoiceNumberLength32*2 , "0");
@@ -773,6 +773,7 @@ class AccessContract
         //llamada al nodo
         $bytecode=$signature.$offsetDocumentUniqueID.$hexDocumentUniqueIdLengthPad.$hexDocumentUniqueIdFull;
         $answer = $utils->curlRequestCall($bytecode);
+
         $result=$answer['result'];
         // ejemplo de resultado
         //0x6163636570746564000000000000000000000000000000000000000000000000
