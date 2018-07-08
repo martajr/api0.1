@@ -342,7 +342,7 @@ class AccessContract
         $hexFactoringTotalFull= str_pad($hexFactoringTotal,  $hexFactoringTotalLength32*2 , "0");
         //llamada al nodo
         $bytecode=$signature.$offsetDocumentUniqueId.$offsetFactoringTotal.
-            $hexDocumentUniqueIdLengthPad.$hexDocumentUniqueIdFull.$hexFactoringTotalLengthPad.$hexFactoringTotal;
+            $hexDocumentUniqueIdLengthPad.$hexDocumentUniqueIdFull.$hexFactoringTotalLengthPad.$hexFactoringTotalFull;
         $hashTx = $utils->curlRequestSendTransaction($bytecode);
         return $hashTx['result'];
     }
@@ -393,10 +393,10 @@ class AccessContract
         $offsetFinancialInstitutionName = str_pad(dechex(32*2+32+$hexDocumentUniqueIdLength32), 64, "0", STR_PAD_LEFT);//numero de argumentos + offset id y id
         //argumento dinamico completados con ceros
         $hexDocumentUniqueIdFull= str_pad($hexDocumentUniqueId,  $hexDocumentUniqueIdLength32*2 , "0");
-        $hexFactoringTotalFull= str_pad($hexFinancialInstitutionName,  $hexFinancialInstitutionNameLength32*2 , "0");
+        $hexFinancialInstitutionNameFull= str_pad($hexFinancialInstitutionName,  $hexFinancialInstitutionNameLength32*2 , "0");
         //llamada al nodo
         $bytecode=$signature.$offsetDocumentUniqueId.$offsetFinancialInstitutionName.
-            $hexDocumentUniqueIdLengthPad.$hexDocumentUniqueIdFull.$hexFinancialInstitutionName.$hexFinancialInstitutionName;
+            $hexDocumentUniqueIdLengthPad.$hexDocumentUniqueIdFull.$hexFinancialInstitutionNameLengthPad.$hexFinancialInstitutionNameFull;
         $hashTx = $utils->curlRequestSendTransaction($bytecode);
         return $hashTx['result'];
     }
