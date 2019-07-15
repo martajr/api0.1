@@ -34,20 +34,18 @@ class Model
 
     function checkTransaction($hashTx){
         $utils = new Utils();
-        $result =$utils->curlCheckTransaction($hashTx);
         if($utils->curlCheckNetConection()){
-
-        if($result['status']=='0x1') {
-            $status = 'SUCCESS';
-           }else{
-            $status = 'FAILURE';
-        }
-        $hashTx=$result['transactionHash'];
-        $gasUsed=hexdec(trim(substr($result['gasUsed'],2),"0"));
-        $blockNumber=hexdec(trim(substr($result['blockNumber'],2),"0"));
-        $blockHash=$result['blockHash'];
-        return ['status'=>$status,'hashTx'=>$hashTx,'gasUsed'=>$gasUsed,'blockNumber'=>$blockNumber,'blockHash'=>$blockHash];
-
+            $result =$utils->curlCheckTransaction($hashTx);
+            if($result['status']=='0x1') {
+                $status = 'SUCCESS';
+               }else{
+                $status = 'FAILURE';
+            }
+            $hashTx=$result['transactionHash'];
+            $gasUsed=hexdec(trim(substr($result['gasUsed'],2),"0"));
+            $blockNumber=hexdec(trim(substr($result['blockNumber'],2),"0"));
+            $blockHash=$result['blockHash'];
+            return ['status'=>$status,'hashTx'=>$hashTx,'gasUsed'=>$gasUsed,'blockNumber'=>$blockNumber,'blockHash'=>$blockHash];
         }else{
             return ['error' =>'NOT_NETWORK_CONNECTION'];
         }
@@ -63,10 +61,9 @@ class Model
                                $invoiceDate,$expirationDate){
         $contract = new AccessContract();
         $utils = new Utils();
-        $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
-
         if($utils->curlCheckNetConection()){
 
+            $documentUniqueId = $utils->generateId($invoiceNumber, $total, $supplierName, $customerName,$fiscalYear);
                 if(!($contract->exists($documentUniqueId))){
                      $dates = $fiscalYear . "-" . $invoiceDate . "-" . $expirationDate; //(FYFY-AAAA/MM/DD HH:MM:SS-AAAA/MM/DD HH:MM:SS)
                     $hashTx = $contract->insertDocument($documentUniqueId, $invoiceNumber, $total, $currency, $paymentType,
